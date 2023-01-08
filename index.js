@@ -79,7 +79,7 @@ async function DayElement(day) {
     const maxTempContainer = document.createElement('div');
 
     const dayIcon = document.createElement('img');
-    dayIcon.src = `./assets/${getIconFromCode(day.data.icon).icon}`;
+    dayIcon.src = `assets/${getIconFromCode(day.data.icon).icon}`;
     dayIcon.style.filter = getIconFromCode(day.data.icon).filter;
     maxTempContainer.appendChild(dayIcon);
 
@@ -94,11 +94,11 @@ async function DayElement(day) {
     const windContainer = document.createElement('div');
 
     const windIcon = document.createElement('img');
-    windIcon.src = './assets/wind-fill.svg';
+    windIcon.src = 'assets/wind-fill.svg';
     windContainer.appendChild(windIcon);
 
     const windDirection = document.createElement('img');
-    windDirection.src = `./assets/wind-direction.svg`;
+    windDirection.src = `assets/wind-direction.svg`;
     windDirection.style.transform = `rotate(${day.data.windDirection}deg)`;
     windDirection.classList.add('wind-direction');
     windContainer.appendChild(windDirection);
@@ -132,8 +132,8 @@ const loadVariables = () => {
         days.forEach(async (day) => daysContainer.appendChild(await DayElement(day)));
         changeLoadingBar(90);
     
-        document.getElementById('location').innerText = `${city.address.city}, ${city.address.country}`;
-        document.getElementById('banner_icon').src = `./assets/${getIconFromCode(weather.current_weather.weathercode).icon}`;
+        document.getElementById('location').innerText = `${city.address.city == 'undefined' ? '' : city.address.city + ', '}${city.address.country}`;
+        document.getElementById('banner_icon').src = `assets/${getIconFromCode(weather.current_weather.weathercode).icon}`;
         document.getElementById('banner_icon').style.filter = getIconFromCode(weather.current_weather.weathercode).filter;
         document.getElementById('current_temperature').innerText = weather.current_weather.temperature + '°';
         document.getElementById('feels_like').innerText = 'Feels like ' + weather.current_weather.temperature + '°';

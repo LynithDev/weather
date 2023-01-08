@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Weather Application</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="./index.js" defer></script>
+</head>
+<body>
+    <main>
+        <header>
+            <div class="top">
+                <button id="refresh"><img src="/assets/arrow-clockwise-bold.svg" alt="Refresh"></button>
+            </div>
+            <div class="banner">
+                <img src="" id="banner_icon" alt="">
+                <div class="banner_data">
+                    <span id="location">Waiting for input...</span>
+                    <div>
+                        <span id="current_temperature">0°</span>
+                        <span id="feels_like">Feels like 0°</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div id="days_container">
+
+        </div>
+
+        <footer>
+            <span id="last_updated">Haven't updated.</span>
+            <span>Data fetched from <a href="https://api.open-meteo.com/">api.open-meteo.com</a> and <a href="https://geocode.maps.co/">geocode.maps.co</a>. Thanks to <a href="https://phosphoricons.com/">Phosphor Icons</a> for their amazing icons!</span>
+        </footer>
+    </main>
+    <div id="loading">
+        <h1>Simple Weather Application</h1>
+        <div id="loading_bar"></div>
+    </div>
+</body>
+</html>

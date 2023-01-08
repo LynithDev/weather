@@ -1,0 +1,247 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #FAFAFA;
+    font-family: 'Poppins';
+    color: #3E3E3E;
+}
+
+main {
+    display: grid; 
+    grid-template-columns: 1fr; 
+    grid-template-rows: 1fr 1.6fr 0.4fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "header"
+      "content"
+      "footer";
+    min-height: 100vh;
+}
+
+#loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+}
+
+#loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#loading_bar::after {
+    content: "";
+    display: block;
+    width: var(--percentage);
+    max-width: 100%;
+    height: 100%;
+    background-color: #1A5FB4;
+    border-radius: 7px;
+    transition: 0.3s;
+}
+
+#loading_bar {
+    max-width: 500px;
+    width: 100%;
+    height: 20px;
+    background-color: #E0E0E0;
+    border-radius: 7px;
+}
+
+header { grid-area: header; }
+#days_container { grid-area: content; }
+footer { grid-area: footer; }
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+header .banner {
+    padding: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+header .banner img {
+    width: 128px;
+    margin-right: 10px;
+}
+
+header .banner #location {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+header .banner #current_temperature {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+header .banner #feels_like {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+header .top {
+    height: 24px;
+    margin: 10px;
+    position: absolute;
+}
+
+#refresh {
+    background: none;
+    border: none;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+}
+
+#refresh img {
+    width: 100%;
+}
+
+#days_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 1px solid #E0E0E0;
+    box-sizing: border-box;
+    box-shadow: 0px 5px 10px 0px #0000000D;
+}
+
+.day-card {
+    height: 100%;
+    border: 1px solid #E0E0E0;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    width: 100%;
+}
+
+.day-card > * {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-card .wind-direction {
+    width: 16px;
+    image-rendering: optimizeQuality;
+}
+
+.day-card h2 {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0;
+}
+
+.day-card h3 {
+    font-weight: 400;
+    font-size: 16px;
+    margin: 0;
+}
+
+.day-card img {
+    width: 48px;
+}
+
+.day-card .wind-speed {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.day-card .max-temperature {
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+}
+
+.day-card .min-temperature {
+    color: #1A5FB4;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 14px;
+    padding: 20px 45px;
+}
+
+footer #last_updated {
+    color: #5E5E5E;
+}
+
+footer span {
+    color: #B0B0B0;
+}
+
+footer a {
+    color: #9DC0EC;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 1200px) {
+    main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #days_container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .day-card {
+        min-height: 380px;
+        min-width: 33%;
+        width: auto;
+        flex: 1;
+    }
+
+    .day-card > * {
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #banner_icon {
+        width: 64px;
+    }
+    header .banner {
+        padding: 70px 0;
+        width: 100%;
+    }
+    header .banner #location {
+        font-size: 16px;
+    }
+    .day-card {
+        min-width: 50%;
+    }
+}

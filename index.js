@@ -42,6 +42,7 @@ const getIconFromCode = (code) => {
     const icons = [
         { numbers: [0], icon: 'sun-fill.svg', filter: 'invert(86%) sepia(45%) saturate(6054%) hue-rotate(4deg) brightness(98%) contrast(92%)' }, // Clear
         { numbers: [1,2,3], icon: 'cloud-sun-fill.svg', filter: 'invert(60%) sepia(10%) saturate(537%) hue-rotate(167deg) brightness(88%) contrast(90%)' }, // Cloudy
+        { numbers: [45, 48], icon: 'cloud-fog.svg', filter: 'invert(58%) sepia(0%) saturate(1%) hue-rotate(37deg) brightness(97%) contrast(89%)' }, // Foggy
         { numbers: [51, 53, 55, 61, 63, 65, 80, 81, 82], icon: 'cloud-rain-fill.svg', filter: 'invert(16%) sepia(70%) saturate(2152%) hue-rotate(230deg) brightness(94%) contrast(95%)' }, // Rain and drizzle
         { numbers: [56, 57, 66, 67, 71, 73, 75, 77, 85, 86], icon: 'cloud-snow-fill.svg', filter: 'invert(58%) sepia(0%) saturate(1%) hue-rotate(37deg) brightness(97%) contrast(89%)' }, // Snow, freezing rain and freezing drizzle
         { numbers: [95, 96, 99], icon: 'cloud-lightning.svg', filter: 'invert(16%) sepia(35%) saturate(4144%) hue-rotate(230deg) brightness(101%) contrast(94%)'} // Lightning / thunder
@@ -49,14 +50,10 @@ const getIconFromCode = (code) => {
     return icons.find(icon => icon.numbers.includes(code));
 }
 
-const changeLoadingBar = (percentage) => {
-    const loadingBar = document.getElementById('loading_bar');
-    loadingBar.style.setProperty('--percentage', `${percentage}%`);
-    if (percentage >= 100) {
-        document.getElementById("loading").classList.add('hidden');
-    } else {
-        document.getElementById("loading").classList.remove('hidden');
-    }
+const changeLoadingBar = (percentage, text) => {
+    document.getElementById('loading_bar').style.setProperty('--percentage', `${percentage}%`);
+    document.getElementById('loading_status').innerText = text ? text : `Loading...`;
+    document.getElementById("loading").classList.toggle('hidden', percentage >= 100);
 }
 
 async function DayElement(day) {
@@ -79,6 +76,7 @@ async function DayElement(day) {
     const maxTempContainer = document.createElement('div');
 
     const dayIcon = document.createElement('img');
+    console.log(day.data);
     dayIcon.src = `assets/${getIconFromCode(day.data.icon).icon}`;
     dayIcon.style.filter = getIconFromCode(day.data.icon).filter;
     maxTempContainer.appendChild(dayIcon);
@@ -119,18 +117,19 @@ async function DayElement(day) {
 }
 
 const loadVariables = () => {
-    changeLoadingBar(10);
+    changeLoadingBar(10, 'Getting location... (Allow location access if stuck)');
     navigator.geolocation.getCurrentPosition(async (position) => {
+        changeLoadingBar(20, 'Getting weather...');
         const weather = await (await fetchWeather(position.coords.latitude, position.coords.longitude)).json();
-        changeLoadingBar(30);
+        changeLoadingBar(40, 'Getting city...');
         const city = await (await fetchCity(position.coords.latitude, position.coords.longitude)).json();
-        changeLoadingBar(70);
+        changeLoadingBar(70, 'Sorting information...');
         const days = getDays(weather);
     
         const daysContainer = document.getElementById('days_container');
         daysContainer.innerHTML = '';
         days.forEach(async (day) => daysContainer.appendChild(await DayElement(day)));
-        changeLoadingBar(90);
+        changeLoadingBar(90, 'Rendering information...');
     
         document.getElementById('location').innerText = `${city.address.city == 'undefined' ? '' : city.address.city + ', '}${city.address.country}`;
         document.getElementById('banner_icon').src = `assets/${getIconFromCode(weather.current_weather.weathercode).icon}`;
@@ -139,7 +138,7 @@ const loadVariables = () => {
         document.getElementById('feels_like').innerText = 'Feels like ' + weather.current_weather.temperature + '°';
     
         document.getElementById('last_updated').innerText = 'Last updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-        changeLoadingBar(100);
+        changeLoadingBar(100, 'Done!');
     });
 }
 

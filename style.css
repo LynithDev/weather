@@ -38,6 +38,15 @@ main {
     pointer-events: none;
 }
 
+#loading h1 {
+    margin: 0;
+}
+
+#loading > * {
+    margin: 10px;
+    text-align: center;
+}
+
 #loading_bar::after {
     content: "";
     display: block;
@@ -50,7 +59,7 @@ main {
 }
 
 #loading_bar {
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
     height: 20px;
     background-color: #E0E0E0;
@@ -227,6 +236,15 @@ footer a {
 
     .day-card > * {
         margin-top: 20px;
+    }
+
+    #loading h1 {
+        width: 80%;
+    }
+
+    #loading_bar {
+        max-width: 80%;
+        width: 80%;
     }
 }
 

@@ -10,7 +10,6 @@ body {
 main {
     display: grid; 
     grid-template-columns: 1fr; 
-    grid-template-rows: 1fr 1.6fr 0.4fr; 
     gap: 0px 0px; 
     grid-template-areas: 
       "header"
@@ -54,7 +53,7 @@ main {
     max-width: 100%;
     height: 100%;
     background-color: #1A5FB4;
-    border-radius: 7px;
+    border-radius: 999px;
     transition: 0.3s;
 }
 
@@ -63,7 +62,7 @@ main {
     width: 100%;
     height: 20px;
     background-color: #E0E0E0;
-    border-radius: 7px;
+    border-radius: 999px;
 }
 
 header { grid-area: header; }
@@ -87,7 +86,7 @@ header .banner {
 
 header .banner img {
     width: 128px;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 header .banner #location {
@@ -128,23 +127,27 @@ header .top {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    margin: 0px 20px;
     height: 100%;
     border: 1px solid #E0E0E0;
-    box-sizing: border-box;
-    box-shadow: 0px 5px 10px 0px #0000000D;
+    border-radius: 30px;
 }
 
 .day-card {
     height: 100%;
-    border: 1px solid #E0E0E0;
+    border-left: 1px solid #E0E0E0;
     background-color: #FFFFFF;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-width: 170px;
     width: 100%;
+}
+
+.day-card:first-child {
+    border-left: none;
 }
 
 .day-card > * {
@@ -152,7 +155,6 @@ header .top {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 .day-card .wind-direction {
@@ -194,6 +196,24 @@ header .top {
     font-weight: 700;
 }
 
+.day-card .temp-graph-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.day-card .temp-graph-bar-container {
+    width: 30px;
+    margin: 10px 0;
+}
+
+.day-card .temp-graph-bar {
+    width: 30px;
+    border-radius: 999px;
+}
+
 footer {
     display: flex;
     flex-direction: column;
@@ -223,20 +243,27 @@ footer a {
     }
 
     #days_container {
-        flex-direction: row;
-        flex-wrap: wrap;
+        width: 100vw;
+        overflow-x: scroll;
+        justify-content: start;
+        margin: 0;
+        border-radius: 0;
     }
 
+    /*
     .day-card {
         min-height: 380px;
         min-width: 33%;
         width: auto;
         flex: 1;
     }
+    */
 
+    /*
     .day-card > * {
         margin-top: 20px;
     }
+    */
 
     #loading h1 {
         width: 80%;

@@ -56,7 +56,7 @@ const changeLoadingBar = (percentage, text) => {
     document.getElementById("loading").classList.toggle('hidden', percentage >= 100);
 }
 
-async function DayElement(day) {
+async function DayElement(day, maxTemp, minTemp) {
     const element = document.createElement('div');
     element.id = day.data.name;
     element.classList.add('day-card');
@@ -78,14 +78,12 @@ async function DayElement(day) {
     const dayIcon = document.createElement('img');
     console.log(day.data);
     dayIcon.src = `assets/${getIconFromCode(day.data.icon).icon}`;
-    dayIcon.style.filter = getIconFromCode(day.data.icon).filter;
     maxTempContainer.appendChild(dayIcon);
 
     const dayMaxTemperature = document.createElement('span');
     dayMaxTemperature.innerText = day.data.maxTemperature + '°';
-    dayMaxTemperature.style.filter = getIconFromCode(day.data.icon).filter;
     dayMaxTemperature.classList.add('max-temperature');
-    maxTempContainer.appendChild(dayMaxTemperature);
+    // maxTempContainer.appendChild(dayMaxTemperature);
 
     element.appendChild(maxTempContainer);
 
@@ -111,7 +109,35 @@ async function DayElement(day) {
     const dayMinTemperature = document.createElement('span');
     dayMinTemperature.innerText = day.data.minTemperature + '°';
     dayMinTemperature.classList.add('min-temperature');
-    element.appendChild(dayMinTemperature);
+    // element.appendChild(dayMinTemperature);
+
+    const tempGraphContainer = document.createElement('div');
+    tempGraphContainer.classList.add('temp-graph-div');
+
+    const graphBarUnitSize = 25;
+
+    const tempGraphBarContainer = document.createElement('div');
+    tempGraphBarContainer.classList.add('temp-graph-bar-container');
+    tempGraphBarContainer.style.height = (maxTemp-minTemp)*graphBarUnitSize + "px";
+
+    const tempGraphBar = document.createElement('div');
+    tempGraphBar.classList.add('temp-graph-bar');
+    tempGraphBar.style.height = (day.data.maxTemperature - day.data.minTemperature)*graphBarUnitSize + "px";
+    tempGraphBar.style.position = "relative";
+    tempGraphBar.style.top = (maxTemp-day.data.maxTemperature)*graphBarUnitSize + "px";
+
+    let maxColor = lerpColor("#1fb3fe", "#ffcd2b", day.data.maxTemperature.map(-5, 20, 0, 1));
+    let minColor = lerpColor("#1fb3fe", "#ffcd2b", day.data.minTemperature.map(-5, 20, 0, 1));
+
+    tempGraphBar.style.background = `linear-gradient(0deg, ${minColor} 0%, ${maxColor} 100%)`;
+
+    tempGraphBarContainer.appendChild(tempGraphBar);
+
+    tempGraphContainer.appendChild(dayMaxTemperature);
+    tempGraphContainer.appendChild(tempGraphBarContainer);
+    tempGraphContainer.appendChild(dayMinTemperature);
+
+    element.appendChild(tempGraphContainer);
 
     return element;
 }
@@ -123,17 +149,28 @@ const loadVariables = () => {
         const weather = await (await fetchWeather(position.coords.latitude, position.coords.longitude)).json();
         changeLoadingBar(40, 'Getting city...');
         const city = await (await fetchCity(position.coords.latitude, position.coords.longitude)).json();
+        console.log(city);
         changeLoadingBar(70, 'Sorting information...');
         const days = getDays(weather);
     
         const daysContainer = document.getElementById('days_container');
         daysContainer.innerHTML = '';
-        days.forEach(async (day) => daysContainer.appendChild(await DayElement(day)));
+
+        let maxTemps = [];
+        let minTemps = [];
+        days.forEach((day) => {
+            maxTemps.push(day.data.maxTemperature);
+            minTemps.push(day.data.minTemperature);
+        });
+        let maxTemp = Math.max(...maxTemps);
+        let minTemp = Math.min(...minTemps);
+
+        days.forEach(async (day) => daysContainer.appendChild(await DayElement(day, maxTemp, minTemp)));
+        
         changeLoadingBar(90, 'Rendering information...');
     
-        document.getElementById('location').innerText = `${city.address.city == 'undefined' ? '' : city.address.city + ', '}${city.address.country}`;
+        document.getElementById('location').innerText = `${city.address.city == undefined ? city.address.province : city.address.city}, ${city.address.country}`;
         document.getElementById('banner_icon').src = `assets/${getIconFromCode(weather.current_weather.weathercode).icon}`;
-        document.getElementById('banner_icon').style.filter = getIconFromCode(weather.current_weather.weathercode).filter;
         document.getElementById('current_temperature').innerText = weather.current_weather.temperature + '°';
         document.getElementById('feels_like').innerText = 'Feels like ' + weather.current_weather.temperature + '°';
     
